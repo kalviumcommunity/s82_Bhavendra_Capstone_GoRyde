@@ -17,20 +17,6 @@ const HomePage = () => {
         </nav>
       </header>
 
-      {/* Input Section */}
-      <section className="flex justify-center items-center gap-6 py-10 flex-wrap bg-teal-50">
-        <input
-          type="text"
-          placeholder="PickUp Location"
-          className="bg-white px-5 py-4 w-80 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all duration-300"
-        />
-        <input
-          type="text"
-          placeholder="Drop Location"
-          className="bg-white px-5 py-4 w-80 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all duration-300"
-        />
-      </section>
-
       {/* Why Choose Section */}
       <section className="text-center py-16 bg-sky-100">
         <h2 className="text-3xl font-extrabold mb-10 text-gray-800">Why Choose GoRyde?</h2>

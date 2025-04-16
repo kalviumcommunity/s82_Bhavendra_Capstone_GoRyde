@@ -1,0 +1,45 @@
+import React from 'react';
+
+const DestinationCart = () => {
+    return (
+        <div className="bg-[#d0f0f9] min-h-screen flex items-center justify-center px-4">
+            <div className="backdrop-blur-md bg-white/30 border border-white/50 rounded-3xl shadow-2xl p-10 w-full max-w-xl space-y-10">
+                <h2 className="text-3xl font-bold italic text-gray-800">Your Destination</h2>
+
+                <form className="flex flex-col space-y-6">
+                    {/* Pickup */}
+                    <div className="flex flex-col">
+                        <label className="text-lg font-semibold mb-2 text-gray-800">PickUp:</label>
+                        <input
+                            type="text"
+                            placeholder="Enter pickup location"
+                            className="bg-white/70 border border-gray-300 rounded-xl px-5 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all duration-200"
+                        />
+                    </div>
+
+                    {/* Drop */}
+                    <div className="flex flex-col">
+                        <label className="text-lg font-semibold mb-2 text-gray-800">Drop:</label>
+                        <input
+                            type="text"
+                            placeholder="Enter drop location"
+                            className="bg-white/70 border border-gray-300 rounded-xl px-5 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all duration-200"
+                        />
+                    </div>
+
+                    {/* Button */}
+                    <div className="pt-4">
+                        <button
+                            type="submit"
+                            className="w-full bg-teal-600 text-white py-4 rounded-xl text-lg font-semibold hover:bg-teal-700 transition duration-300 shadow-md hover:shadow-xl"
+                        >
+                            Book A Ride
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default DestinationCart;
