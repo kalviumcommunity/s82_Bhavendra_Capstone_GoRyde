@@ -1,8 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 
 const InterfacePage = () => {
+
   return (
     <div className="font-sans text-gray-800 bg-white min-h-screen">
 
@@ -19,20 +20,24 @@ const InterfacePage = () => {
           </Link>
         </nav>
       </header>
-
-      {/* Input Section */}
-      <section className="flex justify-center items-center gap-6 py-10 flex-wrap bg-teal-50">
-        <input
-          type="text"
-          placeholder="PickUp Location"
-          className="bg-white px-5 py-4 w-80 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all duration-300"
-        />
-        <input
-          type="text"
-          placeholder="Drop Location"
-          className="bg-white px-5 py-4 w-80 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all duration-300"
-        />
+      
+       {/* CTA Section */}
+       <section className="bg-coral-100 text-center py-16 px-4 rounded-t-3xl shadow-inner">
+        <h2 className="text-3xl font-bold mb-4 text-gray-800">
+          Experience Comfortable and Affordable Rides
+        </h2>
+        <p className="text-lg mb-8 text-gray-700">
+          Book a ride and enjoy the best service with one and only GoRyde.
+        </p>
+        <Link
+          to="/book"
+          className="inline-block bg-teal-500 text-white px-8 py-3 font-bold rounded-full shadow-md hover:bg-teal-600 transition-all duration-300"
+        >
+          Book a Ride
+        </Link>
       </section>
+
+      
 
       {/* Why Choose Section */}
       <section className="text-center py-16 bg-sky-100">
@@ -54,23 +59,7 @@ const InterfacePage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-coral-100 text-center py-16 px-4 rounded-t-3xl shadow-inner">
-        <h2 className="text-3xl font-bold mb-4 text-gray-800">
-          Experience Comfortable and Affordable Rides
-        </h2>
-        <p className="text-lg mb-8 text-gray-700">
-          Book a ride and enjoy the best service with GoRyde.
-        </p>
-        <Link
-          to="/book"
-          className="inline-block bg-teal-500 text-white px-8 py-3 font-bold rounded-full shadow-md hover:bg-teal-600 transition-all duration-300"
-        >
-          Book a Ride
-        </Link>
-      </section>
-
-    </div>
+         </div>
   );
 };
 

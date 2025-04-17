@@ -12,7 +12,7 @@ const [Password, SetPassword] = useState("")
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate("/");
+    navigate("/interface");
   };
 
   return (
@@ -31,11 +31,10 @@ const [Password, SetPassword] = useState("")
               required
             />
           </div>
-
           <div>
             <label className="block text-gray-700 font-medium mb-2">Email</label>
             <input
-            value = {Email} onChange={(e)=>SetEmail(e,target.value)}
+            value = {Email} onChange={(e)=>SetEmail(e.target.value)}
               type="email"
               placeholder="Enter your email"
               className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-400 transition"

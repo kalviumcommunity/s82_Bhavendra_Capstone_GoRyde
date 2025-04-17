@@ -4,16 +4,14 @@ const bcrypt = require('bcrypt');
 
 const userschema = mongoose.Schema({
     Fullname: { type: String, unique: true, required: true },
-    Email: { type: String, unique: true, required: true, match: [/.+@.+\..+/, 'Please enter a valid email'] },
+    Email: { type: String, unique: true, required: true, match: [/.+@.+\..+/,] },
     PhoneNumber: { type: Number, unique: true, required: true },
     Password: { type: String, minLength: 8, maxLength: 25, required: true },
 });
 
-// Pre-save hook to hash password
 userschema.pre('save', async function (next) {
     const user = this;
 
-    // Only hash the password if it's new or modified
     if (!user.isModified('Password')) return next();
 
     try {
