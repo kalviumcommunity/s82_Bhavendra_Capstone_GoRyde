@@ -17,8 +17,25 @@ const HomePage = () => {
         </nav>
       </header>
 
-      {/* Why Choose Section */}
-      <section className="text-center py-16 bg-sky-100">
+    
+      {/* CTA Section */}
+      <section className="bg-coral-100 text-center py-16 px-4 rounded-t-3xl shadow-inner">
+        <h2 className="text-3xl font-bold mb-4 text-gray-800">
+          Experience Comfortable and Affordable Rides
+        </h2>
+        <p className="text-lg mb-8 text-gray-700">
+          Book a ride and enjoy the best service with one and only GoRyde.
+        </p>
+        <Link
+          to="/book"
+          className="inline-block bg-teal-500 text-white px-8 py-3 font-bold rounded-full shadow-md hover:bg-teal-600 transition-all duration-300"
+        >
+          Book a Ride
+        </Link>
+      </section>
+
+        {/* Why Choose Section */}
+        <section className="text-center py-16 bg-sky-100">
         <h2 className="text-3xl font-extrabold mb-10 text-gray-800">Why Choose GoRyde?</h2>
         <div className="flex justify-center gap-10 flex-wrap px-4">
           {[
@@ -37,21 +54,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-coral-100 text-center py-16 px-4 rounded-t-3xl shadow-inner">
-        <h2 className="text-3xl font-bold mb-4 text-gray-800">
-          Experience Comfortable and Affordable Rides
-        </h2>
-        <p className="text-lg mb-8 text-gray-700">
-          Book a ride and enjoy the best service with GoRyde.
-        </p>
-        <Link
-          to="/book"
-          className="inline-block bg-teal-500 text-white px-8 py-3 font-bold rounded-full shadow-md hover:bg-teal-600 transition-all duration-300"
-        >
-          Book a Ride
-        </Link>
-      </section>
 
     </div>
   );

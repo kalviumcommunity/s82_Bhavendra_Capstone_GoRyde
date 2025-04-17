@@ -27,7 +27,7 @@ const InterfacePage = () => {
           Experience Comfortable and Affordable Rides
         </h2>
         <p className="text-lg mb-8 text-gray-700">
-          Book a ride and enjoy the best service with GoRyde.
+          Book a ride and enjoy the best service with one and only GoRyde.
         </p>
         <Link
           to="/book"
