@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 
-const User = require('../model/user')
+const User = require('../models/user')
 const router = express.Router();
 
 router.post('/signup',async(req,res)=>{

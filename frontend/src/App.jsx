@@ -9,6 +9,7 @@ import Feature from "./pages/Feature";
 import Interface from "./pages/Interface"
 import Profile from './pages/Profile'
 import DestinationCart from "./components/DestinationCart";
+import ForgotPassword from "./pages/otp-page";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/profile" element ={<Profile/>} />
       <Route path="/destination" element={<DestinationCart/>}/>
       <Route path="/features" element={<Feature/>}/>
+      <Route path="/forgotpassword" element={<ForgotPassword/>} />
 
       
 

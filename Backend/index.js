@@ -1,34 +1,41 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+require("dotenv").config();
 
-require('dotenv').config();
+const port = process.env.PORT || 3004;
 
 const app = express();
-const PORT = process.env.PORT || 3004;
-
-app.use(cors());
 app.use(express.json());
 
-const db = async()=>{
-  try{
-  await mongoose.connect(process.env.MONGO_URL)
-  console.log("DB connected successfully")
-}catch(e){
-  console.log(e)
-}
-}
-db();
+// CORS configuration
+app.use(cors({
+  origin: "http://localhost:3004", // Change this to match your frontend's URL if needed
+  credentials: true
+}));
 
-const main = require("./controller/user")
-app.use('/user',main)
+// Routes
+const authRoutes = require("./routes/authRoutes");
 
+// Mount routes
+app.use("/api/auth", authRoutes);
 
-app.listen(PORT, () => {
-  console.log(`connected at http://localhost:${PORT}`);
+// Global Error Handler (keep at the end)
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
 });
 
-
-
-
-
+// Connect to MongoDB and start server
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB connected");
+    app.listen(port, () => {
+      console.log(`Connected Successfully at http://localhost:${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection failed", err);
+  });
