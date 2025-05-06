@@ -5,7 +5,6 @@ const HomePage = () => {
   return (
     <div className="font-sans text-gray-800 bg-white min-h-screen">
 
-      {/* Header */}
       <header className="bg-teal-500 text-white py-6 px-8 flex justify-between items-center shadow-md sticky top-0 z-50">
         <h1 className="text-4xl font-extrabold italic tracking-wide hover:scale-105 transition-transform duration-300">
           GoRyde
