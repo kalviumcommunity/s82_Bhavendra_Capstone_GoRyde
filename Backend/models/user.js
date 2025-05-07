@@ -11,7 +11,7 @@ const userschema = mongoose.Schema({
         match: [/.+@.+\..+/, "Please enter a valid email"]
     },
     PhoneNumber: { type: Number, unique: true, required: true },
-    Password: { type: String, minLength: 8, maxLength: 25, required: true },
+    Password: { type: String, minLength: 4, required: true },
 
     // 🔐 OTP Fields
     otp: { type: String },
@@ -33,6 +33,4 @@ userschema.pre('save', async function (next) {
     }
 });
 
-const User = mongoose.model('User', userschema);
-
-module.exports = User;
+module.exports = mongoose.models.User || mongoose.model("User", userschema);
