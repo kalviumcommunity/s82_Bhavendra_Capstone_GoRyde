@@ -8,6 +8,7 @@ const port = process.env.PORT || 3004;
 const app = express();
 app.use(express.json());
 
+
 // CORS configuration
 app.use(cors({
   origin: "http://localhost:3004", // Change this to match your frontend's URL if needed
@@ -16,9 +17,10 @@ app.use(cors({
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
-
+const userroutes = require("./routes/userRoutes")
 // Mount routes
 app.use("/api/auth", authRoutes);
+app.use("/api/User",userroutes)
 
 // Global Error Handler (keep at the end)
 app.use((err, req, res, next) => {
@@ -29,7 +31,7 @@ app.use((err, req, res, next) => {
 });
 
 // Connect to MongoDB and start server
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URL)
   .then(() => {
     console.log("MongoDB connected");
     app.listen(port, () => {
