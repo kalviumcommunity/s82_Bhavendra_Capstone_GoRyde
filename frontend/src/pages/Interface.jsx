@@ -2,8 +2,9 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 
-const InterfacePage = () => {
 
+const InterfacePage = () => {
+const navigate = useNavigate();
   return (
     <div className="font-sans text-gray-800 bg-white min-h-screen">
 
@@ -30,11 +31,11 @@ const InterfacePage = () => {
           Book a ride and enjoy the best service with one and only GoRyde.
         </p>
         <Link
-          to="/book"
-          className="inline-block bg-teal-500 text-white px-8 py-3 font-bold rounded-full shadow-md hover:bg-teal-600 transition-all duration-300"
-        >
+          to="/destination" 
+          className="inline-block bg-teal-500 text-white px-8 py-3 font-bold rounded-full shadow-md hover:bg-teal-600 transition-all duration-300">
           Book a Ride
         </Link>
+
       </section>
 
       

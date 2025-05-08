@@ -11,7 +11,7 @@ app.use(express.json());
 
 // CORS configuration
 app.use(cors({
-  origin: "http://localhost:5173", // Change this to match your frontend's URL if needed
+  origin: "http://localhost:5175", // Change this to match your frontend's URL if needed
   credentials: true
 }));
 
@@ -20,7 +20,7 @@ const authRoutes = require("./routes/authRoutes");
 const userroutes = require("./routes/userRoutes")
 // Mount routes
 app.use("/api/auth", authRoutes);
-app.use("/api/User",userroutes)
+app.use("/api/user",userroutes)
 
 // Global Error Handler (keep at the end)
 app.use((err, req, res, next) => {

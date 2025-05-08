@@ -4,6 +4,33 @@ const mongoose = require('mongoose')
 const User = require('../models/user')
 const router = express.Router();
 
+router.get('/signup', async (req, res) => {
+  try {
+      const users = await User.find();
+      if (!users.length) {
+          return res.status(404).json({ message: "No users found" });
+      }
+      res.status(200).json({ message: "Users fetched successfully", data: users });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+router.get('/send',async(req,res)=>{
+    try{
+  const getuser = await User.find()  
+  if(!getuser)
+    return res.status(400).json({msg:"No data"})
+    res.status(200).json({msg:getuser})
+    }catch(err){
+         res.status(500).json({msg:err})
+    }
+})
+
+
+
+
+
 router.post('/signup',async(req,res)=>{
    try{
     const {Fullname,Email,PhoneNumber,Password} = req.body
@@ -15,10 +42,9 @@ router.post('/signup',async(req,res)=>{
       });
    
       if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+        return res.status(400).json({ message: "User exists" });
       }
   
-
     const savedb = new User({Fullname,Email,PhoneNumber,Password})
      await savedb.save();
      res.status(200).json({message:"User saved DB",data:savedb})
@@ -28,16 +54,65 @@ router.post('/signup',async(req,res)=>{
    }
 })
 
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user)
+       return res.status(400).json({ message: "Invalid email or password" });
 
-router.get('/send',async(req,res)=>{
-    try{
-  const getuser = await User.find()  
-  if(!getuser)
-    return res.status(400).json({msg:"No data"})
-    res.status(200).json({msg:getuser})
-    }catch(err){
-         res.status(500).json({msg:err})
-    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+       return res.status(400).json({ message: "Invalid email or password" });
 
-})
+    res.status(200).json({ message: "Login successful" });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
+
+
+
+router.put('/signup/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const updates = req.body;
+
+      const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true });
+
+      if (!updatedUser) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      res.status(200).json({ message: "User updated", data: updatedUser });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+
+
+
+router.delete('/signup/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+
+      const deletedUser = await User.findByIdAndDelete(id);
+
+      if (!deletedUser) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      res.status(200).json({ message: "User deleted", data: deletedUser });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+
+
 module.exports = router

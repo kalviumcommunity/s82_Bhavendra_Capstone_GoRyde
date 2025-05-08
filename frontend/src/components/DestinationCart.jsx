@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const DestinationCart = () => {
+    const navigate = useNavigate();
     return (
         <div className="bg-[#d0f0f9] min-h-screen flex items-center justify-center px-4">
             <div className="backdrop-blur-md bg-white/30 border border-white/50 rounded-3xl shadow-2xl p-10 w-full max-w-xl space-y-10">
@@ -29,12 +31,12 @@ const DestinationCart = () => {
 
                     {/* Button */}
                     <div className="pt-4">
-                        <button
-                            type="submit"
-                            className="w-full bg-teal-600 text-white py-4 rounded-xl text-lg font-semibold hover:bg-teal-700 transition duration-300 shadow-md hover:shadow-xl"
+                        <Link
+                            to="/selectride"
+                            className="inline-block bg-teal-500 text-white px-8 py-3 font-bold rounded-full shadow-md hover:bg-teal-600 transition-all duration-300"
                         >
-                            Book A Ride
-                        </button>
+                            Book a Ride
+                        </Link>
                     </div>
                 </form>
             </div>

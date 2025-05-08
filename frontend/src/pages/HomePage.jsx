@@ -26,7 +26,7 @@ const HomePage = () => {
           Book a ride and enjoy the best service with one and only GoRyde.
         </p>
         <Link
-          to="/book"
+          to="/login"
           className="inline-block bg-teal-500 text-white px-8 py-3 font-bold rounded-full shadow-md hover:bg-teal-600 transition-all duration-300"
         >
           Book a Ride
