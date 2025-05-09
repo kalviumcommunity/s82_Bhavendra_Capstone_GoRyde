@@ -18,19 +18,19 @@ const userschema = mongoose.Schema({
     otpExpires: { type: Date }
 });
 
-// 🔒 Hash password before saving
-userschema.pre('save', async function (next) {
-    const user = this;
+// // 🔒 Hash password before saving
+// userschema.pre('save', async function (next) {
+//     const user = this;
 
-    if (!user.isModified('Password')) return next();
+//     if (!user.isModified('Password')) return next();
 
-    try {
-        const salt = await bcrypt.genSalt(10);
-        user.Password = await bcrypt.hash(user.Password, salt);
-        next();
-    } catch (err) {
-        next(err);
-    }
-});
+//     try {
+//         const salt = await bcrypt.genSalt(10);
+//         user.Password = await bcrypt.hash(user.Password, salt);
+//         next();
+//     } catch (err) {
+//         next(err);
+//     }
+// });
 
 module.exports = mongoose.models.User || mongoose.model("User", userschema);
