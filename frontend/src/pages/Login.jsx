@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const loginData = {
-      email,
-      password,
+      Email,
+      Password,
     };
 
     try {
@@ -47,7 +47,7 @@ const Login = () => {
             <label className="mb-2 font-medium text-gray-700">Email</label>
             <input
               type="email"
-              value={email}
+              value={Email}
               onChange={(e) => setEmail(e.target.value)}
               className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all duration-300"
               placeholder="Enter your email"
@@ -59,7 +59,7 @@ const Login = () => {
             <label className="mb-2 font-medium text-gray-700">Password</label>
             <input
               type="password"
-              value={password}
+              value={Password}
               onChange={(e) => setPassword(e.target.value)}
               className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 transition-all duration-300"
               placeholder="Enter your password"

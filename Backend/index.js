@@ -11,7 +11,7 @@ app.use(express.json());
 
 // CORS configuration
 app.use(cors({
-  origin: "http://localhost:5175", // Change this to match your frontend's URL if needed
+  origin: "http://localhost:5173", // Change this to match your frontend's URL if needed
   credentials: true
 }));
 
