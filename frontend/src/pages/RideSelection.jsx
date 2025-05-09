@@ -1,9 +1,11 @@
-import React from "react";
-import { FaMotorcycle, FaTaxi, FaBiking, FaRupeeSign } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaMotorcycle, FaTaxi, FaRupeeSign } from "react-icons/fa";
 import { MdLocalOffer } from "react-icons/md";
 import { PiMotorcycleFill } from "react-icons/pi";
 
 const RideSelection = () => {
+  const [selectedRide, setSelectedRide] = useState(0);
+
   const rides = [
     {
       type: "Bike",
@@ -17,7 +19,7 @@ const RideSelection = () => {
     },
     {
       type: "Auto",
-      desc: "",
+      desc: "Affordable auto rides",
       eta: "3 mins",
       drop: "10:29 am",
       price: 60,
@@ -25,7 +27,7 @@ const RideSelection = () => {
     },
     {
       type: "Cab Economy",
-      desc: "",
+      desc: "Budget-friendly cabs",
       eta: "3 mins",
       drop: "10:29 am",
       price: 108,
@@ -33,7 +35,7 @@ const RideSelection = () => {
     },
     {
       type: "Cab Premium",
-      desc: "",
+      desc: "Luxury cab experience",
       eta: "3 mins",
       drop: "10:29 am",
       price: 114,
@@ -47,10 +49,9 @@ const RideSelection = () => {
       <div className="relative w-full h-[55vh] bg-gray-200">
         <img
           src="https://maps.googleapis.com/maps/api/staticmap?center=Madurai&zoom=14&size=600x400&key=YOUR_API_KEY"
-          alt="map"
+          alt="Map view"
           className="w-full h-full object-cover"
         />
-        {/* Pickup and drop tags */}
         <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
           <div className="bg-white px-3 py-2 rounded-full shadow text-xs font-medium">Madurai Railway Station</div>
           <div className="bg-white px-3 py-2 rounded-full shadow text-xs font-medium">Meenakshi Amman Temple</div>
@@ -65,9 +66,10 @@ const RideSelection = () => {
         {rides.map((ride, idx) => (
           <div
             key={idx}
-            className={`flex items-center justify-between p-4 rounded-xl ${
-              idx === 0 ? "border border-blue-400 bg-blue-50" : ""
-            } mb-2`}
+            onClick={() => setSelectedRide(idx)}
+            className={`cursor-pointer flex items-center justify-between p-4 rounded-xl mb-2 transition-colors duration-200 ${
+              selectedRide === idx ? "border border-blue-400 bg-blue-50" : "hover:bg-gray-50"
+            }`}
           >
             <div className="flex items-center space-x-4">
               {ride.icon}
@@ -78,7 +80,7 @@ const RideSelection = () => {
                     <span className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">FASTEST</span>
                   )}
                 </div>
-                <p className="text-sm text-gray-500">{ride.desc}</p>
+                <p className="text-sm text-gray-500">{ride.desc || "Reliable ride"}</p>
                 <p className="text-xs text-gray-400">{ride.eta} • Drop {ride.drop}</p>
               </div>
             </div>
@@ -104,7 +106,7 @@ const RideSelection = () => {
         </div>
 
         <button className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 rounded-xl">
-          Book Bike
+          Book {rides[selectedRide].type}
         </button>
       </div>
     </div>
