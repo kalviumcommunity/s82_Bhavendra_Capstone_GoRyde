@@ -14,7 +14,7 @@ const navigate = useNavigate();
           GoRyde
         </h1>
         <nav className="space-x-8 text-lg font-semibold flex items-center">
-          <Link to="/features" className="hover:text-yellow-200 transition-colors duration-300">Features</Link>
+        
           <Link to="/book" className="hover:text-yellow-200 transition-colors duration-300">Book a Ride</Link>
           <Link to="/profile" className="hover:text-yellow-200 transition-colors duration-300 text-2xl">
             <FaUserCircle />
