@@ -3,7 +3,7 @@
   https://magenta-mochi-aa5525.netlify.app/
 
 # Backend Deployed Link
-https://s82-bhavendra-capstone-goryde-6.onrender.com
+https://s82-bhavendra-capstone-goryde-5.onrender.com
 
 
 ## 🚀 Project Title
