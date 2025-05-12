@@ -2,6 +2,10 @@
 # Frontend Deployed Link--
   https://magenta-mochi-aa5525.netlify.app/
 
+# Backend Deployed Link
+https://s82-bhavendra-capstone-goryde-6.onrender.com
+
+
 ## 🚀 Project Title
 **GoRyde - Ride Booking and Management Platform**
 
