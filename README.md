@@ -1,4 +1,6 @@
 # GoRyde - Ride Booking and Management Platform 
+# Frontend Deployed Link--
+  https://magenta-mochi-aa5525.netlify.app/
 
 ## 🚀 Project Title
 **GoRyde - Ride Booking and Management Platform**
