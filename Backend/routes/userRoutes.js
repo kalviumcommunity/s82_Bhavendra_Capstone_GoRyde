@@ -3,6 +3,10 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const router = express.Router();
+const sendToken = require("../utils/jwttoken");
+const ErrorHandler = require("../utils/ErrorHandler");
+
+
 
 router.get('/signup', async (req, res) => {
   try {
@@ -63,26 +67,26 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+
 router.post("/login", async (req, res) => {
   const { Email, Password } = req.body;
   try {
     const user = await User.findOne({ Email });
     if (!user)
       return res.status(400).json({ message: "Invalid email" });
-    console.log(user.Password)
 
-    const isMatch = await bcrypt.compare(Password, user.Password)
-    console.log(isMatch)
+    const isMatch = await bcrypt.compare(Password, user.Password);
     if (!isMatch)
-      return res.status(400).json({ message: "Invalid  password" });
+      return res.status(400).json({ message: "Invalid password" });
 
-    res.status(200).json({ message: "Login successful" });
+
+    sendToken(user, 200, res);
+
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
-
 
 
 

@@ -10,11 +10,11 @@ const sendToken = (user, statusCode, res) => {
   res.status(statusCode).json({
     success: true,
     message: "Login successful",
-    token, // ✅ This is what you want in Postman
+    token, 
     user: {
       id: user._id,
-      name: user.name,
-      email: user.email,
+      Fullname: user.Fullname,
+      Email: user.Email,
     }
   });
 };
