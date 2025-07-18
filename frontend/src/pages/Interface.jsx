@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
+import Axios from '../api/Axios';
 
 
 const InterfacePage = () => {

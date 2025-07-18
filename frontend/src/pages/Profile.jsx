@@ -1,4 +1,5 @@
 import React from "react";
+import Axios from '../api/Axios';
 import { FaUserCircle, FaPhoneAlt, FaEnvelope, FaHome } from "react-icons/fa";
 
 const Profile = () => {

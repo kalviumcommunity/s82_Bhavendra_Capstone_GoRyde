@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Polyline } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import Axios from '../api/Axios';
 import axios from 'axios';
 
 const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
@@ -12,8 +13,8 @@ const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
   const a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLon / 2) ** 2;
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 };
@@ -36,41 +37,43 @@ const RideTracking = () => {
   const [distance, setDistance] = useState(null);
   const [status, setStatus] = useState('');
   const [driver, setDriver] = useState(null);
+  const [otp, setOtp] = useState(null);
 
- /*useEffect(() => {
-    setStatus('accepted');
-    setDriver({
-      name: 'Driver',
-      phoneNumber: '+6305065039',
-      vehicleNumber: 'TN 01 AA 1234',
-    });
-  }, []);*/
-
+  // 🚦 Move driver only if status === 'started'
   useEffect(() => {
-    let step = 0;
-    const interval = setInterval(() => {
-      if (step <= 1) {
-        const lat = pickup[0] + (drop[0] - pickup[0]) * step;
-        const lng = pickup[1] + (drop[1] - pickup[1]) * step;
-        setDriverPosition([lat, lng]);
+    if (status === 'started') {
+      let step = 0;
+      const interval = setInterval(() => {
+        if (step <= 1) {
+          const lat = pickup[0] + (drop[0] - pickup[0]) * step;
+          const lng = pickup[1] + (drop[1] - pickup[1]) * step;
+          setDriverPosition([lat, lng]);
 
-        const dist = getDistanceFromLatLonInKm(lat, lng, drop[0], drop[1]);
-        setDistance(dist.toFixed(2));
-        setEta(Math.ceil((dist / 0.5) * 60));
+          const dist = getDistanceFromLatLonInKm(lat, lng, drop[0], drop[1]);
+          setDistance(dist.toFixed(2));
+          setEta(Math.ceil((dist / 0.5) * 60));
 
-        step += 0.02;
-      } else {
-        clearInterval(interval);
-      }
-    }, 500);
+          step += 0.02;
+        } else {
+          clearInterval(interval);
+          setStatus('completed'); // Optional – you can remove this if backend sets it
+        }
+      }, 500);
 
-    return () => clearInterval(interval);
-  }, [pickup, drop]);
+      return () => clearInterval(interval);
+    }
+  }, [status, pickup, drop]);
 
+  // 🎯 Get ride & driver info
   useEffect(() => {
     if (rideId) {
       axios.get(`/api/ride/${rideId}`)
-        .then(res => setStatus(res.data.status))
+        .then(res => {
+          setStatus(res.data.status);
+          if (res.data.status === 'arrived') {
+            setOtp(res.data.otp);
+          }
+        })
         .catch(console.error);
 
       axios.get(`/api/ride/driver/${rideId}`)
@@ -78,6 +81,20 @@ const RideTracking = () => {
         .catch(console.error);
     }
   }, [rideId]);
+
+
+  useEffect(() => {
+  if (status === 'completed') {
+    navigate('/payment', {
+      state: {
+        rideId,
+        distance,
+        driver,
+      },
+    });
+  }
+}, [status, distance, driver, rideId, navigate]);
+
 
   return (
     <div className="h-screen w-full flex flex-col items-center justify-start">
@@ -146,6 +163,14 @@ const RideTracking = () => {
               Cancel Ride
             </button>
           </div>
+        </div>
+      )}
+
+      {status === 'arrived' && otp && (
+        <div className="mt-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 w-[90%] max-w-xl rounded-md shadow">
+          <h3 className="font-semibold text-lg">Your OTP:</h3>
+          <p className="text-3xl font-bold mt-2 tracking-widest">{otp}</p>
+          <p className="text-sm mt-1">Share this OTP with your driver to start the ride.</p>
         </div>
       )}
     </div>

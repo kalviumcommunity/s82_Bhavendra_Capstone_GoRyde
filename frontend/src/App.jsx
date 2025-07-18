@@ -13,6 +13,8 @@ import RoadMap from "./components/RoadMap";
 import FindingDriver from "./pages/FindingDriver";
 import RideConfirmed from "./pages/RideConfirmed " 
 import RideTracking from "./pages/RideTracking";
+import Payment from "./pages/Payment";
+import MyRides from "./pages/MyRides";
 
 
 import "./index.css";
@@ -35,6 +37,9 @@ function App() {
         <Route path="/finding-driver" element={<FindingDriver/>} />
         <Route path='/ride-confirmed' element={<RideConfirmed/>}/>
         <Route path='/ridetrack' element={<RideTracking/>}/>
+        <Route path='/payment' element={<Payment/>}/>
+        <Route path='/my-rides' element={<MyRides/>}/>
+  
       </Routes>
     </BrowserRouter>
   );
