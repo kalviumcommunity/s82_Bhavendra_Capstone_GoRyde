@@ -1,64 +1,155 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, Polyline } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import axios from 'axios';
 
-const RideTrackingCard = () => {
+const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
+
+const RideTracking = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const rideId = location.state?.rideId || localStorage.getItem('rideId');
+
+  const pickup =
+    location.state?.pickupCoords ||
+    JSON.parse(localStorage.getItem('pickupCoords')) || [12.9716, 77.5946];
+  const drop =
+    location.state?.dropCoords ||
+    JSON.parse(localStorage.getItem('dropCoords')) || [12.9352, 77.6146];
+
+  const [driverPosition, setDriverPosition] = useState(pickup);
+  const [eta, setEta] = useState(null);
+  const [distance, setDistance] = useState(null);
+  const [status, setStatus] = useState('');
+  const [driver, setDriver] = useState(null);
+
+ /*useEffect(() => {
+    setStatus('accepted');
+    setDriver({
+      name: 'Driver',
+      phoneNumber: '+6305065039',
+      vehicleNumber: 'TN 01 AA 1234',
+    });
+  }, []);*/
+
+  useEffect(() => {
+    let step = 0;
+    const interval = setInterval(() => {
+      if (step <= 1) {
+        const lat = pickup[0] + (drop[0] - pickup[0]) * step;
+        const lng = pickup[1] + (drop[1] - pickup[1]) * step;
+        setDriverPosition([lat, lng]);
+
+        const dist = getDistanceFromLatLonInKm(lat, lng, drop[0], drop[1]);
+        setDistance(dist.toFixed(2));
+        setEta(Math.ceil((dist / 0.5) * 60));
+
+        step += 0.02;
+      } else {
+        clearInterval(interval);
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [pickup, drop]);
+
+  useEffect(() => {
+    if (rideId) {
+      axios.get(`/api/ride/${rideId}`)
+        .then(res => setStatus(res.data.status))
+        .catch(console.error);
+
+      axios.get(`/api/ride/driver/${rideId}`)
+        .then(res => setDriver(res.data))
+        .catch(console.error);
+    }
+  }, [rideId]);
+
   return (
-    <div className="bg-gray-100 rounded-2xl p-6 m-6 shadow-lg w-full max-w-md mx-auto">
-      
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="bg-white py-2 px-4 rounded-full shadow-sm">
-          <p className="text-sm font-semibold text-gray-800">Captain on the way</p>
-          <p className="text-xs text-gray-500">240 m away</p>
-        </div>
-        <div className="bg-white py-2 px-4 rounded-full shadow-sm">
-          <p className="text-sm font-semibold text-gray-800">1 min</p>
-        </div>
-      </div>
+    <div className="h-screen w-full flex flex-col items-center justify-start">
+      <h2 className="text-2xl font-bold text-center py-4 text-teal-700">Tracking Your Ride...</h2>
 
-      {/* PIN Input */}
-      <div className="mb-6 text-center">
-        <p className="text-sm text-gray-700 mb-2">Start your order with PIN</p>
-        <div className="flex justify-center space-x-2">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-gray-400 w-6 h-6 rounded-md" />
-          ))}
-        </div>
-      </div>
+      {eta && (
+        <p className="text-lg text-gray-700 font-semibold mb-2">
+          ETA: {eta} min &bull; Distance: {distance} km
+        </p>
+      )}
 
-      {/* Map Preview */}
-      <div className="relative bg-gray-300 rounded-xl h-40 mb-6 flex items-center justify-center overflow-hidden">
-        <p className="text-gray-500 z-10">Map Preview</p>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-          <div className="bg-gray-800 w-10 h-10 rounded-full flex items-center justify-center shadow-md">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="white"
-              className="w-6 h-6"
+      <MapContainer center={pickup} zoom={14} style={{ height: '60%', width: '100%' }}>
+        <TileLayer
+          attribution='&copy; OpenStreetMap contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        <Marker
+          position={pickup}
+          icon={L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+            iconSize: [32, 32],
+          })}
+        />
+
+        <Marker
+          position={drop}
+          icon={L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+            iconSize: [32, 32],
+          })}
+        />
+
+        <Marker
+          position={driverPosition}
+          icon={L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/194/194938.png',
+            iconSize: [40, 40],
+          })}
+        />
+
+        <Polyline positions={[pickup, driverPosition]} color="teal" />
+      </MapContainer>
+
+      {['accepted', 'arriving'].includes(status) && driver && (
+        <div className="mt-4 bg-white rounded-xl p-5 shadow-md w-[90%] max-w-xl text-left">
+          <h3 className="text-xl font-bold mb-2">Driver Details</h3>
+          <p><strong>Name:</strong> {driver.name}</p>
+          <p><strong>Phone:</strong> {driver.phoneNumber}</p>
+          <p><strong>Vehicle:</strong> {driver.vehicleNumber}</p>
+
+          <div className="flex gap-4 mt-4">
+            <a
+              href={`tel:${driver.phoneNumber}`}
+              className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.125h15.003M2.25 21.375h.375m19.125-.375h.375m-19.5-1.875h19.5"
-              />
-            </svg>
+              Call Driver
+            </a>
+            <button
+              onClick={() => {
+                alert('Ride cancelled');
+                navigate('/interface');
+              }}
+              className="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600"
+            >
+              Cancel Ride
+            </button>
           </div>
         </div>
-      </div>
-
-      {/* Pickup Info & Button */}
-      <div className="flex justify-between items-center">
-        <p className="text-sm text-gray-800">
-          Pickup Point: <span className="text-gray-600">Fra...</span>
-        </p>
-        <button className="bg-white py-2 px-4 rounded-full text-sm font-semibold text-teal-600 shadow-sm hover:bg-teal-50 transition">
-          Trip Details
-        </button>
-      </div>
+      )}
     </div>
   );
 };
 
-export default RideTrackingCard;
+export default RideTracking;

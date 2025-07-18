@@ -13,9 +13,10 @@ const services = [
 const Services = () => {
   const navigate = useNavigate();
 
-  const handleServiceClick = () => {
-    navigate("/ridetrack");
-  };
+  const handleServiceClick = (selectedService) => {
+  localStorage.setItem("selectedVehicle", selectedService.name); 
+  navigate("/finding-driver", { state: { vehicle: selectedService.name } });
+};
 
   return (
     <div className="bg-gradient-to-br from-teal-100 to-teal-300 min-h-screen flex flex-col items-center py-16 px-4">
@@ -27,7 +28,7 @@ const Services = () => {
         {services.map((service, index) => (
           <div
             key={index}
-            onClick={handleServiceClick}
+            onClick={() => handleServiceClick(service)}
             className="cursor-pointer w-44 h-52 p-4 bg-white rounded-3xl shadow-xl flex flex-col items-center justify-center space-y-4 transform transition duration-300 hover:scale-105 hover:shadow-2xl"
           >
             <div className="w-24 h-24 bg-gradient-to-tr from-teal-300 to-yellow-200 rounded-full flex items-center justify-center shadow-inner text-5xl">

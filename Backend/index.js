@@ -1,33 +1,33 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const http = require("http");
+const { Server } = require("socket.io");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-const port = process.env.PORT || 3004;
-
 const app = express();
+const PORT = process.env.PORT || 3004;
+
+// Middlewares
 app.use(express.json());
-
-
-const cookieParser = require("cookie-parser");
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-
-
-// CORS configuration
 app.use(cors({
-  origin: "http://localhost:5173", // Change this to match your frontend's URL if needed
+  origin: "http://localhost:5173",
   credentials: true
 }));
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
-const userroutes = require("./routes/userRoutes")
-// Mount routes
-app.use("/api/auth", authRoutes);
-app.use("/api/user",userroutes)
+const userroutes = require("./routes/userRoutes");
+const rideRoutes = require('./routes/rideRoutes');
 
-// Global Error Handler (keep at the end)
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userroutes);
+app.use("/api/ride", rideRoutes);
+
+// Global Error Handler
 app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).json({
     success: false,
@@ -35,12 +35,35 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Connect to MongoDB and start server
+// Create HTTP server and attach socket.io
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"]
+  }
+});
+
+// Socket.IO logic
+io.on("connection", (socket) => {
+  console.log("Socket connected:", socket.id);
+
+  socket.on("driverLocation", ({ rideId, coords }) => {
+    // Send location to all users tracking this ride
+    io.emit(`rideLocation:${rideId}`, coords);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected:", socket.id);
+  });
+});
+
+// Connect MongoDB and start server
 mongoose.connect(process.env.MONGO_URL)
   .then(() => {
     console.log("MongoDB connected");
-    app.listen(port, () => {
-      console.log(`Connected Successfully at http://localhost:${port}`);
+    server.listen(PORT, () => {
+      console.log(` Server running at http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
