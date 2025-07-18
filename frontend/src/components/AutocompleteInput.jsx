@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Search } from 'lucide-react'; // Optional: icon library like Lucide
+import Axios from '../api/Axios';
 
 const AutocompleteInput = ({ label, placeholder, value, setValue }) => {
   const [suggestions, setSuggestions] = useState([]);

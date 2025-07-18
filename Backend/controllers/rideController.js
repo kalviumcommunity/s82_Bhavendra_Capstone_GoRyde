@@ -73,12 +73,11 @@ exports.updateRideStatus = async (req, res) => {
     res.status(500).json({ message: "Error updating ride status", err });
   }
   if (status === 'started') {
-  ride.startTime = new Date();
-  ride.otp = Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit OTP
-}
+    ride.startTime = new Date();
+    ride.otp = Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit OTP
+  }
 
 };
-
 
 
 exports.getAllRides = async (req, res) => {
@@ -110,7 +109,7 @@ exports.getRideById = async (req, res, next) => {
     const ride = await Ride.findById(req.params.rideId);
     if (!ride) return res.status(404).json({ message: 'Ride not found' });
 
-    res.status(200).json(ride); 
+    res.status(200).json(ride);
   } catch (err) {
     next(err);
   }
@@ -158,3 +157,53 @@ exports.getDriverForRide = async (req, res, next) => {
     next(err);
   }
 };
+
+
+exports.rateRide = async (req, res) => {
+  const { rideId } = req.params;
+  const { rating } = req.body;
+
+  try {
+    const ride = await Ride.findById(rideId);
+    if (!ride) return res.status(404).json({ message: 'Ride not found' });
+
+    ride.rating = rating;
+    await ride.save();
+
+    res.status(200).json({ message: 'Rating submitted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error saving rating', error: err });
+  }
+};
+
+
+exports.getMyRides = async (req, res) => {
+  try {
+    const rides = await Ride.find({ userId: req.user._id }).sort({ createdAt: -1 });
+    res.json(rides);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch rides', error: err });
+  }
+};
+
+
+exports.rateRide = async (req, res) => {
+  const { rideId } = req.params;
+  const { rating, paymentMethod } = req.body;
+
+  try {
+    const ride = await Ride.findById(rideId);
+    if (!ride) return res.status(404).json({ message: 'Ride not found' });
+
+    ride.rating = rating;
+    ride.paymentMethod = paymentMethod;
+    await ride.save();
+
+    res.status(200).json({ message: 'Rating and payment method saved' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error saving data', error: err });
+  }
+};
+
+
+

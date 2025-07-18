@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import Axios from '../api/Axios';
 <Link to="/ridetrack">Track Your Ride</Link>
 
 const RideConfirmed = () => {
