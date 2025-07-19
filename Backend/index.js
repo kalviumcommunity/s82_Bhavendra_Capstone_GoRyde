@@ -3,13 +3,13 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-const cookieParser = require("cookie-parser")
-require("dotenv").config()
+const cookieParser = require("cookie-parser");
+require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3004;
 
-// Middlewares
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
