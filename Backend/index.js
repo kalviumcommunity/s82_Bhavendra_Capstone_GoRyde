@@ -39,7 +39,7 @@ app.use((err, req, res, next) => {
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST"]
   }
 });
@@ -50,7 +50,7 @@ io.on("connection", (socket) => {
 
   socket.on("driverLocation", ({ rideId, coords }) => {
     // Send location to all users tracking this ride
-    io.emit(`rideLocation:${rideId}`, coords);
+    io.emit(`rideLocation:${rideId}`, coords)
   });
 
   socket.on("disconnect", () => {
