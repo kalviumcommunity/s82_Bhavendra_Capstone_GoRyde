@@ -16,7 +16,7 @@ const Login = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:3004/api/user/login", {
+      const response = await fetch("https://s82-bhavendra-capstone-goryde-6.onrender.com/api/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
