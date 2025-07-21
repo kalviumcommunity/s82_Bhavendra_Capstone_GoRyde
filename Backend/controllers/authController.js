@@ -63,6 +63,7 @@ const verifyOtpController = async (req, res) => {
 
 // ✅ Define signupUser before exporting it
 const signupUser = async (req, res) => {
+  console.log("Signup controller hit:", req.body);
   try {
     const { name, email, password, isDriver } = req.body;
     if (!name || !email || !password) {
@@ -71,7 +72,7 @@ const signupUser = async (req, res) => {
 
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(409).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
