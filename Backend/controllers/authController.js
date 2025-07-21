@@ -3,6 +3,12 @@ const User = require('../models/user'); // Assuming you are using CommonJS
 const generateOTP = require('../utils/generateOTP'); // For generating OTP
 const sendEmail = require('../utils/sendEmail'); // For sending emails
 
+const generateToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+};
+
 // Send OTP to email
 const sendOtpController = async (req, res) => {
   const { Email } = req.body;
@@ -55,5 +61,43 @@ const verifyOtpController = async (req, res) => {
     res.status(500).json({ message: "Failed to verify OTP" });
   }
 };
+
+exports.loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+    const token = generateToken(user._id);
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isDriver: user.isDriver,
+      },
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 
 module.exports = { sendOtpController, verifyOtpController };
