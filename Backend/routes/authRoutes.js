@@ -9,6 +9,7 @@ router.post('/forgot-password', sendOtpController);
 
 // POST request for verify-otp
 router.post('/verify-otp', verifyOtpController);
+router.post("/signup", SignupUser);
 
 router.post("/login", loginUser);
 
