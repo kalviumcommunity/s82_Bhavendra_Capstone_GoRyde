@@ -63,6 +63,37 @@ const verifyOtpController = async (req, res) => {
   }
 };
 
+
+exports.SignupUser = async (req, res) => {
+  try {
+    const { name, email, password, isDriver } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      isDriver,
+    });
+
+    await newUser.save();
+    res.status(201).json({ message: "User registered successfully" });
+
+  } catch (error) {
+    console.error("Register error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 // Login Controller
 const loginUser = async (req, res) => {
   try {
