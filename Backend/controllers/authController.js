@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('../models/user'); 
-const generateOTP = require('../utils/generateOTP'); 
-const sendEmail = require('../utils/sendEmail'); 
+const User = require('../models/user');
+const generateOTP = require('../utils/generateOTP');
+const sendEmail = require('../utils/sendEmail');
 
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
@@ -13,14 +13,13 @@ const generateToken = (userId) => {
 // Send OTP to email
 const sendOtpController = async (req, res) => {
   const { Email } = req.body;
-
   try {
     const user = await User.findOne({ Email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const otp = generateOTP();
     user.otp = otp;
-    user.otpExpires = Date.now() + 5 * 60 * 1000; // 5 mins
+    user.otpExpires = Date.now() + 5 * 60 * 1000;
     await user.save();
 
     await sendEmail(
@@ -39,7 +38,6 @@ const sendOtpController = async (req, res) => {
 // Verify OTP
 const verifyOtpController = async (req, res) => {
   const { Email, otp } = req.body;
-
   try {
     const user = await User.findOne({ Email });
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -63,8 +61,8 @@ const verifyOtpController = async (req, res) => {
   }
 };
 
-
-exports.SignupUser = async (req, res) => {
+// ✅ Define signupUser before exporting it
+const signupUser = async (req, res) => {
   try {
     const { name, email, password, isDriver } = req.body;
     if (!name || !email || !password) {
@@ -93,8 +91,7 @@ exports.SignupUser = async (req, res) => {
   }
 };
 
-
-// Login Controller
+// ✅ Define loginUser
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -128,9 +125,10 @@ const loginUser = async (req, res) => {
   }
 };
 
-// ✅ EXPORT ALL AT ONCE
+// ✅ Export after all are defined
 module.exports = {
   sendOtpController,
   verifyOtpController,
+  signupUser,
   loginUser,
 };
