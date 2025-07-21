@@ -5,7 +5,7 @@ import Axios from '../api/Axios';
 
 const RideConfirmed = () => {
   const location = useLocation();
-  const vehicle = location.state?.vehicle || 'Taxi';
+  const vehicle = location.state?.vehicle || 'Taxi'
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-green-50 text-gray-800">
